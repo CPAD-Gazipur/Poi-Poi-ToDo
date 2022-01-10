@@ -7,7 +7,6 @@ import 'package:poi_poi_todo/models/note_model.dart';
 import 'add_note_screen.dart';
 
 class HomeScreen extends StatefulWidget {
-
   @override
   _HomeScreenState createState() => _HomeScreenState();
 }
@@ -70,12 +69,14 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           onTap: () {
             Navigator.push(
-                context,
-                CupertinoPageRoute(
-                    builder: (_) => AddNoteScreen(
-                          updateNoteList: _updateNoteList(),
-                          note: note,
-                        )));
+              context,
+              CupertinoPageRoute(
+                builder: (_) => AddNoteScreen(
+                  updateNoteList: _updateNoteList(),
+                  note: note,
+                ),
+              ),
+            );
           },
         ),
       ),
@@ -90,12 +91,13 @@ class _HomeScreenState extends State<HomeScreen> {
         backgroundColor: Theme.of(context).primaryColor,
         onPressed: () {
           Navigator.push(
-              context,
-              CupertinoPageRoute(
-                builder: (_) => AddNoteScreen(
-                  updateNoteList: _updateNoteList,
-                ),
-              ));
+            context,
+            CupertinoPageRoute(
+              builder: (_) => AddNoteScreen(
+                updateNoteList: _updateNoteList,
+              ),
+            ),
+          );
         },
         child: Icon(
           Icons.add,
