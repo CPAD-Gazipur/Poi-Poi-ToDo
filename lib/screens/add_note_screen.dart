@@ -72,17 +72,17 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
     }
   }
 
-  _delete() {
-    DatabaseHelper.instance.deleteNote(widget.note!.id!);
-
-    Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-          builder: (_) => HomeScreen(),
-        ));
-
-    widget.updateNoteList!();
-  }
+  // _delete() {
+  //   DatabaseHelper.instance.deleteNote(widget.note!.id!);
+  //
+  //   Navigator.pushReplacement(
+  //       context,
+  //       MaterialPageRoute(
+  //         builder: (_) => HomeScreen(),
+  //       ));
+  //
+  //   widget.updateNoteList!();
+  // }
 
   _submit() {
     if (_formKey.currentState!.validate()) {
@@ -127,33 +127,37 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
             child: Container(
               padding: EdgeInsets.symmetric(
                 horizontal: 20.0,
-                vertical: 10.0,
+                vertical: 25.0,
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.pop(context);
-                    },
-                    child: Icon(
-                      Icons.arrow_back_ios_rounded,
-                      size: 25.0,
-                      color: Theme.of(context).primaryColor,
-                    ),
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  Center(
-                    child: Text(
-                      titleText,
-                      style: TextStyle(
-                        color: Colors.lightBlueAccent.shade200,
-                        fontSize: 20.0,
-                        fontWeight: FontWeight.bold,
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.pop(context);
+                        },
+                        child: Icon(
+                          Icons.arrow_back_ios_rounded,
+                          size: 25.0,
+                          color: Theme.of(context).primaryColor,
+                        ),
                       ),
-                    ),
+                      Text(
+                        titleText,
+                        style: TextStyle(
+                          color: Colors.lightBlueAccent.shade200,
+                          fontSize: 20.0,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      SizedBox(
+                        width: 30,
+                      ),
+                    ],
                   ),
                   SizedBox(
                     height: 20.0,
@@ -268,28 +272,28 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
                             ),
                           ),
                         ),
-                        widget.note != null
-                            ? Container(
-                                margin: EdgeInsets.symmetric(vertical: 10.0),
-                                height: 60.0,
-                                width: double.infinity,
-                                decoration: BoxDecoration(
-                                  color: Theme.of(context).primaryColor,
-                                  borderRadius: BorderRadius.circular(40.0),
-                                ),
-                                child: ElevatedButton(
-                                  onPressed: _delete,
-                                  child: Text(
-                                    'delete'.toUpperCase(),
-                                    style: TextStyle(
-                                      fontSize: 18.0,
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ),
-                              )
-                            : SizedBox.shrink(),
+                        // widget.note != null
+                        //     ? Container(
+                        //         margin: EdgeInsets.symmetric(vertical: 10.0),
+                        //         height: 60.0,
+                        //         width: double.infinity,
+                        //         decoration: BoxDecoration(
+                        //           color: Theme.of(context).primaryColor,
+                        //           borderRadius: BorderRadius.circular(40.0),
+                        //         ),
+                        //         child: ElevatedButton(
+                        //           onPressed: _delete,
+                        //           child: Text(
+                        //             'delete'.toUpperCase(),
+                        //             style: TextStyle(
+                        //               fontSize: 18.0,
+                        //               color: Colors.white,
+                        //               fontWeight: FontWeight.bold,
+                        //             ),
+                        //           ),
+                        //         ),
+                        //       )
+                        //     : SizedBox.shrink(),
                       ],
                     ),
                   )
