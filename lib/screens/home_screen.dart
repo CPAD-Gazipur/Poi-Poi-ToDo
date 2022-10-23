@@ -130,29 +130,11 @@ class _HomeScreenState extends State<HomeScreen> {
           builder: (context, AsyncSnapshot snapshot) {
             if (!snapshot.hasData) {
               return Center(
-                // child: CircularProgressIndicator(),
-                child: Column(
-                  children: [
-                    Container(
-                      width: 120,
-                      height: 300,
-                      decoration: const BoxDecoration(
-                        image: DecorationImage(
-                            image: AssetImage("images/waiting.png"),
-                            fit: BoxFit.cover),
-                      ),
-                    ),
-                    Text(
-                      'Nothing now... Start adding some tasks!!',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ],
-                ),
+                child: CircularProgressIndicator(),
               );
             }
 
+            
             final int completeNoteCount = snapshot.data!
                 .where((Note note) => note.status == 1)
                 .toList()
