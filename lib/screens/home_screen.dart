@@ -28,6 +28,12 @@ class _HomeScreenState extends State<HomeScreen> {
     _noteList = DatabaseHelper.instance.getNoteList();
   }
 
+  _delete(Note note) {
+    DatabaseHelper.instance.deleteNote(note.id!);
+    _updateNoteList();
+    setState((){ });
+  }
+
   Widget _buildTaskDesign(Note note, BuildContext context) {
     return Padding(
       padding: EdgeInsets.symmetric(
@@ -56,16 +62,31 @@ class _HomeScreenState extends State<HomeScreen> {
                   : TextDecoration.lineThrough,
             ),
           ),
-          trailing: Checkbox(
-            onChanged: (value) {
-              note.status = value! ? 1 : 0;
-              DatabaseHelper.instance.updateNote(note);
-              _updateNoteList();
-              Navigator.pushReplacement(
-                  context, MaterialPageRoute(builder: (_) => HomeScreen()));
-            },
-            activeColor: Theme.of(context).primaryColor,
-            value: note.status == 1 ? true : false,
+          trailing: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              GestureDetector(
+                onTap: () {
+                  showConfirmDialog(note);
+                },
+                child: Icon(
+                  Icons.delete,
+                  size: 25.0,
+                  color: Colors.red,
+                ),
+              ),
+              Checkbox(
+                onChanged: (value) {
+                  note.status = value! ? 1 : 0;
+                  DatabaseHelper.instance.updateNote(note);
+                  _updateNoteList();
+                  Navigator.pushReplacement(
+                      context, MaterialPageRoute(builder: (_) => HomeScreen()));
+                },
+                activeColor: Theme.of(context).primaryColor,
+                value: note.status == 1 ? true : false,
+              ),
+            ],
           ),
           onTap: () {
             Navigator.push(
@@ -110,16 +131,15 @@ class _HomeScreenState extends State<HomeScreen> {
             if (!snapshot.hasData) {
               return Center(
                 // child: CircularProgressIndicator(),
-                child : Column(
+                child: Column(
                   children: [
                     Container(
                       width: 120,
                       height: 300,
                       decoration: const BoxDecoration(
                         image: DecorationImage(
-                          image: AssetImage("images/waiting.png"),
-                          fit: BoxFit.cover
-                        ),
+                            image: AssetImage("images/waiting.png"),
+                            fit: BoxFit.cover),
                       ),
                     ),
                     Text(
@@ -159,14 +179,23 @@ class _HomeScreenState extends State<HomeScreen> {
                         SizedBox(
                           height: 5.0,
                         ),
-                        Text(
-                          '$completeNoteCount of ${snapshot.data.length} task is complete',
-                          style: TextStyle(
-                            color: Colors.lightBlueAccent.shade100,
-                            fontSize: 14.0,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
+                        completeNoteCount == 0 && snapshot.data.length == 0
+                            ? Text(
+                                'Hey! you did not add any task yet',
+                                style: TextStyle(
+                                  color: Colors.lightBlueAccent.shade100,
+                                  fontSize: 14.0,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              )
+                            : Text(
+                                '$completeNoteCount of ${snapshot.data.length} task is complete',
+                                style: TextStyle(
+                                  color: Colors.lightBlueAccent.shade100,
+                                  fontSize: 14.0,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
                       ],
                     ),
                   );
@@ -175,6 +204,69 @@ class _HomeScreenState extends State<HomeScreen> {
               },
             );
           }),
+    );
+  }
+
+  showConfirmDialog(Note note) {
+    return showDialog(
+      context: context,
+      builder: (context) {
+        return Dialog(
+            shape:
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+            elevation: 16,
+            child: Container(
+              padding: const EdgeInsets.fromLTRB(10, 30, 10, 30),
+              height: 150.0,
+              width: MediaQuery.of(context).size.width * 0.9,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: <Widget>[
+                  const Text(
+                    'Are you sure you want to delete?',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black,
+                        fontSize: 14.0),
+                  ),
+                  const SizedBox(height: 15.0),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      RaisedButton(
+                        color: Theme.of(context).primaryColor,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(25.0),
+                        ),
+                        onPressed: () {
+                          _delete(note);
+                          Navigator.pop(context);
+                        },
+                        padding: const EdgeInsets.all(12),
+                        child: const Text('Yes',
+                            style:
+                            TextStyle(color: Colors.white, fontSize: 14)),
+                      ),
+                      RaisedButton(
+                        color: Theme.of(context).primaryColor,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(25.0),
+                        ),
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        padding: const EdgeInsets.all(12),
+                        child: const Text('No',
+                            style:
+                            TextStyle(color: Colors.white, fontSize: 14)),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ));
+      },
     );
   }
 }
